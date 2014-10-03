@@ -3,10 +3,19 @@
  */
 package main;
 
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import rmi.RMIMessage;
 import rmi.RMIMessage.RMIMsgType;
+import rmi.RMIServerRegistry;
+import services.Hello;
+import services.RMIService;
 import network.NetworkMgr;
 
 /**
@@ -14,23 +23,21 @@ import network.NetworkMgr;
  *
  */
 public class RMIServer {
-
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO: register local services
 		
+		Hello hello = new Hello();
+		RMIServerRegistry.sharedRegistry().bind("Hello", hello);
 		
-		Socket client = NetworkMgr.sharedNetworkMgr().waitForClient();
-		System.out.println("client connected!");
-		
+		NetworkMgr netmgr = NetworkMgr.sharedNetworkMgr();
 		
 		while (true) {
-			RMIMessage msg = NetworkMgr.sharedNetworkMgr().receiveMsg(client);
-			if (msg._type == RMIMsgType.LOOKUP) {
-				
-			}
+			Socket client = netmgr.waitForClient();
+			System.out.println("client connected!");
+			new RMISvrHandler(client).start();
 		}
 	}
 

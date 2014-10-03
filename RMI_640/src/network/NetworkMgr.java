@@ -25,8 +25,9 @@ public class NetworkMgr {
 		try {
 			_svrSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Port " + ServerConst.ListenPort + " is being used. Please change to"
+					+ " another port in ServerConst.java and ClientConst.java in client.");
+			System.exit(-1);
 		}
 	}
 	
@@ -48,22 +49,15 @@ public class NetworkMgr {
 		return null;
 	}
 	
-	public RMIMessage receiveMsg(Socket socket) {
+	public RMIMessage receiveMsg(Socket socket) throws IOException, ClassNotFoundException {
 		ObjectInputStream inStream;
 		Object inObj;
-		try {
-			inStream = new ObjectInputStream(socket.getInputStream());
-			inObj = inStream.readObject();
-			if (inObj instanceof RMIMessage) {
-				RMIMessage msg = (RMIMessage) inObj;
-				return msg;
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			
+		
+		inStream = new ObjectInputStream(socket.getInputStream());
+		inObj = inStream.readObject();
+		if (inObj instanceof RMIMessage) {
+			RMIMessage msg = (RMIMessage) inObj;
+			return msg;
 		}
 		
 		return null;
