@@ -24,6 +24,7 @@ public class RMIMessage implements Serializable {
 		CALL_RESPOND,
 		LIST,
 		LIST_RESPOND,
+		EXCEPTION
 	};
 	
 	public RMIMsgType _type;
@@ -113,6 +114,9 @@ public class RMIMessage implements Serializable {
 		return obj;
 	}
 	public Class<?>[] getArgType() {
+		if (_type != RMIMsgType.CALL) {
+			return null;
+		}
 		Object[] nobj = Arrays.copyOfRange((Object[])_content, 2, ((Object[])_content).length);
 		Class<?>[] types = new Class<?>[nobj.length];
 		for (int i=0; i<nobj.length; ++i) {

@@ -20,6 +20,7 @@ public class RMIMessage implements Serializable {
 		CALL_RESPOND,
 		LIST,
 		LIST_RESPOND,
+		EXCEPTION
 	};
 	
 	public RMIMsgType _type;

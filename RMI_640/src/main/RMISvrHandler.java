@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import network.NetworkMgr;
 import rmi.RMIMessage;
@@ -65,10 +63,8 @@ public class RMISvrHandler extends Thread {
 			}
 			else if (msg._type == RMIMsgType.CALL) {
 				// objName, funName, arg
-				Object[] content = (Object[])msg._content;
-				String objName = (String) content[0];
-				String funName = (String) content[1];
-//				String arg = (String) content[2];
+				String objName = msg.getObjectName();
+				String funName = msg.getMethodName();
 				
 				Object[] arg = msg.getArguments();
 				Class<?>[] argType = msg.getArgType();
@@ -88,6 +84,8 @@ public class RMISvrHandler extends Thread {
 					for (Class<?> type: argType) {
 						System.out.print(type.getName() + " ");
 					}
+					RMIMessage ret = new RMIMessage();
+					ret._type = RMIMsgType.EXCEPTION;
 				} catch (SecurityException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
 					e.printStackTrace();
