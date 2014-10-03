@@ -25,8 +25,9 @@ public class NetworkMgr {
 		try {
 			_svrSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Port " + ServerConst.ListenPort + " is being used. Please change to"
+					+ " another port in ServerConst.java and ClientConst.java in client.");
+			System.exit(-1);
 		}
 	}
 	
