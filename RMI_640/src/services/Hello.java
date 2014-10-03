@@ -7,8 +7,8 @@ package services;
  * @author PY
  *
  */
-public class Hello {
-	public void haha(String a) {
-		
+public class Hello extends RMIService {
+	public String haha(String a) {
+		return "yohaha: " + a;
 	}
 }
