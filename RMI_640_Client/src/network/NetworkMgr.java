@@ -33,11 +33,5 @@ public class NetworkMgr extends Object {
 		return rmiMsg;
 		
 	}
-	public int haha(String a, String b, int c, double[] d) {
-		System.out.println("in test~: " + a+b);
-		for (double ch: d) {
-			System.out.println(ch);
-		}
-		return c+10;
-	}
+	
 }

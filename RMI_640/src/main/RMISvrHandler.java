@@ -68,18 +68,27 @@ public class RMISvrHandler extends Thread {
 				Object[] content = (Object[])msg._content;
 				String objName = (String) content[0];
 				String funName = (String) content[1];
-				String arg = (String) content[2];
+//				String arg = (String) content[2];
+				
+				Object[] arg = msg.getArguments();
+				Class<?>[] argType = msg.getArgType();
 				RMIService obj = _registry.getObj(objName);
+				
 				try {
-					Method m = obj.getClass().getMethod(funName, String.class);
-					Object retVal = m.invoke(_registry.getObj(objName), arg);
+					Method m = obj.getClass().getMethod(funName, argType);
+					Object retVal = m.invoke(obj, arg);
 					
 					RMIMessage ret = new RMIMessage();
 					ret._type = RMIMsgType.CALL_RESPOND;
 					ret._content = retVal;
 					_netmgr.sendMsg(_socket, ret);
 					
-				} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				} catch (NoSuchMethodException e) {
+					System.out.println("No such method " + funName + ": ");
+					for (Class<?> type: argType) {
+						System.out.print(type.getName() + " ");
+					}
+				} catch (SecurityException | IllegalAccessException | IllegalArgumentException
 						| InvocationTargetException e) {
 					e.printStackTrace();
 				}
