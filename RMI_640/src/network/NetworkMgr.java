@@ -31,6 +31,29 @@ public class NetworkMgr {
 		}
 	}
 	
+	public static RMIMessage sendAndReceive(String ipAddr, int port, RMIMessage msg) {
+		RMIMessage rmiMsg = null;
+		try {
+			Socket socket = new Socket(ipAddr, port);
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			out.writeObject(msg);
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			Object inMsg = in.readObject();
+			if (inMsg instanceof RMIMessage) {
+				rmiMsg = (RMIMessage) inMsg;
+			}
+			
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return rmiMsg;
+		
+	}
+	
+	public static String getLocalIP() {
+		return "127.0.0.1";
+	}
+	
 	public static NetworkMgr sharedNetworkMgr() {
 		if (_sharedNetworkMgr == null) {
 			_sharedNetworkMgr = new NetworkMgr(ServerConst.ListenPort);

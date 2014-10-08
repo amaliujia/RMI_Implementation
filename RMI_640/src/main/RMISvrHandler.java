@@ -11,6 +11,7 @@ import java.net.Socket;
 import network.NetworkMgr;
 import rmi.RMIMessage;
 import rmi.RMIMessage.RMIMsgType;
+import rmi.RMIObjectReference;
 import rmi.RMIServerRegistry;
 import services.RMIService;
 
@@ -48,9 +49,15 @@ public class RMISvrHandler extends Thread {
 			}
 			if (msg._type == RMIMsgType.LOOKUP) {
 				String name = (String)msg._content;
+				
+				RMIObjectReference ror = new RMIObjectReference();
+				ror._objName = name;
+				ror._svrIP = NetworkMgr.getLocalIP();
+				ror._svrPort = ServerConst.ListenPort;
+				
 				RMIMessage ret = new RMIMessage();
 				ret._type = RMIMsgType.LOOKUP_RESPOND;
-				ret._content = _registry.getObj(name);
+				ret._content = ror;
 				_netmgr.sendMsg(_socket, ret);
 			}
 			else if (msg._type == RMIMsgType.LIST) {
