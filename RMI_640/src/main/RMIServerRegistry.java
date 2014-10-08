@@ -1,19 +1,22 @@
 /**
  * 
  */
-package rmi;
+package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import services.RMIService;
+import rmi.RMIException;
+import rmi.RMIObjectReference;
+import rmi.RMIRegistry;
+import rmi.RMIService;
 
 /**
  * @author PY
  *
  */
-public class RMIServerRegistry {
+public class RMIServerRegistry implements RMIRegistry {
 	static RMIServerRegistry _sharedRegistry = null;
 	HashMap <String, RMIService> _registeredServices = null;
 	
@@ -28,7 +31,8 @@ public class RMIServerRegistry {
 		_registeredServices = new HashMap<String, RMIService>();
 	}
 	
-	public void bind(String name, RMIService obj) {
+	@Override
+	public void bind(String name, RMIService obj) throws RMIException {
 		_registeredServices.put(name, obj);
 	}
 	
@@ -46,8 +50,11 @@ public class RMIServerRegistry {
 		}
 		return (String[]) names.toArray();
 	}
-	
-	public void rebind() {
-		
+
+	@Override
+	public RMIObjectReference lookup(String objName) throws RMIException {
+		// TODO Auto-generated method stub
+		return null;
 	}
+	
 }

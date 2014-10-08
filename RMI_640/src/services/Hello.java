@@ -3,6 +3,8 @@
  */
 package services;
 
+import rmi.RMIService;
+
 /**
  * @author PY
  *

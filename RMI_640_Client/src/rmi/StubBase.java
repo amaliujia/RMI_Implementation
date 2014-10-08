@@ -1,13 +1,10 @@
 /**
  * 
  */
-package stub;
+package rmi;
 
-import network.NetworkMgr;
-import rmi.RMIMessage;
 import rmi.RMIMessage.RMIMsgType;
-import rmi.RMIException;
-import rmi.RMIObjectReference;
+import network.NetworkMgr;
 
 /**
  * @author PY

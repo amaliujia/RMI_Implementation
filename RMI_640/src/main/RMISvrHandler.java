@@ -12,8 +12,7 @@ import network.NetworkMgr;
 import rmi.RMIMessage;
 import rmi.RMIMessage.RMIMsgType;
 import rmi.RMIObjectReference;
-import rmi.RMIServerRegistry;
-import services.RMIService;
+import rmi.RMIService;
 
 /**
  * @author PY

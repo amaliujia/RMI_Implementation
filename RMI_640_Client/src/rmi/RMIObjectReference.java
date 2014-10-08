@@ -7,8 +7,6 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-import stub.StubBase;
-
 /**
  * @author PY
  *
@@ -32,6 +30,7 @@ public class RMIObjectReference implements Serializable {
 			Class<?> clazz = Class.forName("stub."+_objName+"_stub");
 			Constructor<?> cons = clazz.getConstructor();
 			StubBase stub = (StubBase)cons.newInstance(new Object[] {});
+			stub._ror = this;
 			return stub;
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException 

@@ -4,7 +4,7 @@
 package main;
 
 import rmi.RMIException;
-import rmi.RMIRegistry;
+import rmi.RMIObjectReference;
 import stub.Hello_stub;
 
 /**
@@ -17,11 +17,11 @@ public class RMIClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		RMIRegistry registry = new RMIRegistry();
-		Hello_stub h = null;
+		RMIClientRegistry registry = new RMIClientRegistry();
 		
 		try {
-			h = (Hello_stub)registry.lookup("Hello");
+			RMIObjectReference ror = registry.lookup("Hello");
+			Hello_stub h = (Hello_stub)ror.localize();
 			System.out.println(h.haha("eeeee"));
 			String arg1 = "aa";
 			String arg2 = "bb";
