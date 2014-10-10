@@ -21,4 +21,9 @@ public class Hello extends RMIService {
 		}
 		return c+10;
 	}
+	
+	public MyName whatsMyName() {
+		MyName name = new MyName();
+		return name;
+	}
 }

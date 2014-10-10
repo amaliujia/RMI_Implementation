@@ -5,6 +5,7 @@ package stub;
 
 import rmi.RMIException;
 import rmi.RMIMessage;
+import rmi.RMIObjectReference;
 import rmi.client.StubBase;
 
 /**
@@ -27,8 +28,21 @@ public class Hello_stub extends StubBase {
 		Object[] content = {_ror, "test", a, b, c, d};
 		Object retVal = invokeRemote(content, true);
 		if (!(retVal instanceof Integer)) {
-			throw new RMIException("Invalid return value type! int expected, but" + retVal.getClass().getName() + " received.");
+			throw new RMIException("Invalid return value type! int expected, but " + retVal.getClass().getName() + " received.");
 		}
 		return ((Integer)retVal).intValue();
+	}
+	
+	public MyName_stub whatsMyName() throws RMIException {
+		Object[] content = {_ror, "whatsMyName"};
+		Object retVal = invokeRemote(content, true);
+		
+		if (!(retVal instanceof RMIObjectReference)) {
+			throw new RMIException("Invalid return value type! RMIObjectReference expected, but " 
+					+ retVal.getClass().getName() + " received.");
+		}
+		
+		MyName_stub myname = (MyName_stub)(((RMIObjectReference)retVal).localize());
+		return myname;
 	}
 }

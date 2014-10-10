@@ -10,9 +10,9 @@ import rmi.client.StubBase;
  * @author PY
  *
  */
-public class MyName extends StubBase {
+public class MyName_stub extends StubBase {
 	public String getName() throws RMIException {
-		Object[] content = {_ror._objName, "getName"};
+		Object[] content = {_ror, "getName"};
 		Object retVal = invokeRemote(content, true);
 		
 		if (!(retVal instanceof String)) {
@@ -22,7 +22,7 @@ public class MyName extends StubBase {
 	}
 	
 	public void setName(String name) throws RMIException {
-		Object[] content = {_ror._objName, "getName"};
+		Object[] content = {_ror, "setName", name};
 		invokeRemote(content, false);
 	}
 }

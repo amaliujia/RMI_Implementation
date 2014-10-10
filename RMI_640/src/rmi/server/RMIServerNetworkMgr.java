@@ -106,7 +106,7 @@ public class RMIServerNetworkMgr {
 						/* if return value is subclass of RMIService, return ROR */
 						RMIServerRegistry.sharedRegistry().addReferencedService((RMIService) retVal);
 						RMIObjectReference ror = new RMIObjectReference();
-						ror._objName = retVal.getClass().getName();
+						ror._objName = retVal.getClass().getSimpleName();
 						ror._remoteID = ((RMIService) retVal)._rorID;
 						ror._svrIP = RMIServerNetworkMgr.getLocalIP();
 						ror._svrPort = ServerConst.ListenPort;
