@@ -20,7 +20,7 @@ public class StubBase {
 		RMIMessage outMsg = new RMIMessage();
 		outMsg._type = RMIMsgType.CALL;
 		outMsg._content = content;
-		RMIMessage inMsg = RMIServerNetworkMgr.sendAndReceive(_ror._svrIP, _ror._svrPort, outMsg);
+		RMIMessage inMsg = RMIClientNetworkMgr.sendAndReceive(_ror._svrIP, _ror._svrPort, outMsg);
 		if (inMsg == null) {
 			throw new RMIException("Invalid return value");
 		}

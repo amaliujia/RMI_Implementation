@@ -7,6 +7,7 @@ import rmi.RMIException;
 import rmi.RMIMessage;
 import rmi.RMIObjectReference;
 import rmi.RMIMessage.RMIMsgType;
+import rmi.server.RMIServerNetworkMgr;
 
 /**
  * @author PY

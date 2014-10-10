@@ -38,7 +38,6 @@ public class RMIObjectReference implements Serializable {
 				| IllegalArgumentException | InvocationTargetException 
 				| NoSuchMethodException | SecurityException 
 				| ClassNotFoundException e) {
-			e.printStackTrace();
 			throw new RMIException("Failed to localize for " + _objName);
 		}
 	}

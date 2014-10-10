@@ -21,7 +21,7 @@ public class RMIClientRegistry {
 		RMIMessage msg = new RMIMessage();
 		msg._type = RMIMsgType.LOOKUP;
 		msg._content = objName;
-		RMIMessage inMsg = RMIServerNetworkMgr.sendAndReceive(_svrIP, _svrPort, msg);
+		RMIMessage inMsg = RMIClientNetworkMgr.sendAndReceive(_svrIP, _svrPort, msg);
 		if (inMsg._content == null || !(inMsg._content instanceof RMIObjectReference)) {
 			throw new RMIException("Invalid respond from server");
 		}
