@@ -1,8 +1,11 @@
 /**
  * 
  */
-package rmi;
+package rmi.client;
 
+import rmi.RMIException;
+import rmi.RMIMessage;
+import rmi.RMIObjectReference;
 import rmi.RMIMessage.RMIMsgType;
 import rmi.server.RMIServerNetworkMgr;
 

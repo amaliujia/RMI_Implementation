@@ -1,27 +1,28 @@
 /**
  * 
  */
-package network;
+package rmi.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
-import main.ServerConst;
 import rmi.RMIMessage;
 
 /**
  * @author PY
  *
  */
-public class NetworkMgr {
+public class RMIServerNetworkMgr {
 	ServerSocket _svrSocket;
 	
-	static NetworkMgr _sharedNetworkMgr = null;
+	static RMIServerNetworkMgr _sharedNetworkMgr = null;
 	
-	NetworkMgr(int port) {
+	RMIServerNetworkMgr(int port) {
 		try {
 			_svrSocket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -51,12 +52,18 @@ public class NetworkMgr {
 	}
 	
 	public static String getLocalIP() {
-		return "127.0.0.1";
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		return null;
 	}
 	
-	public static NetworkMgr sharedNetworkMgr() {
+	public static RMIServerNetworkMgr sharedNetworkMgr() {
 		if (_sharedNetworkMgr == null) {
-			_sharedNetworkMgr = new NetworkMgr(ServerConst.ListenPort);
+			_sharedNetworkMgr = new RMIServerNetworkMgr(ServerConst.ListenPort);
 		}
 		return _sharedNetworkMgr;
 	}

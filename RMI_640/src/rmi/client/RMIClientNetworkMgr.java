@@ -1,7 +1,7 @@
 /**
  * 
  */
-package network;
+package rmi.client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +14,7 @@ import rmi.RMIMessage;
  * @author PY
  *
  */
-public class NetworkMgr extends Object {
+public class RMIClientNetworkMgr extends Object {
 	public static RMIMessage sendAndReceive(String ipAddr, int port, RMIMessage msg) {
 		RMIMessage rmiMsg = null;
 		try {

@@ -5,7 +5,7 @@ package stub;
 
 import rmi.RMIException;
 import rmi.RMIMessage;
-import rmi.StubBase;
+import rmi.client.StubBase;
 
 /**
  * @author PY

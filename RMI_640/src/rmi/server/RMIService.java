@@ -1,7 +1,7 @@
 /**
  * 
  */
-package rmi;
+package rmi.server;
 
 /**
  * @author PY

@@ -5,6 +5,7 @@ package main;
 
 import rmi.RMIException;
 import rmi.RMIObjectReference;
+import rmi.client.RMIClientRegistry;
 import stub.Hello_stub;
 
 /**

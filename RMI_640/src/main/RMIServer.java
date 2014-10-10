@@ -3,20 +3,12 @@
  */
 package main;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 import rmi.RMIException;
-import rmi.RMIMessage;
-import rmi.RMIService;
-import rmi.RMIMessage.RMIMsgType;
+import rmi.server.RMIServerNetworkMgr;
+import rmi.server.RMIServerRegistry;
 import services.Hello;
-import network.NetworkMgr;
 
 /**
  * @author PY
@@ -37,7 +29,7 @@ public class RMIServer {
 			e.printStackTrace();
 		}
 		
-		NetworkMgr netmgr = NetworkMgr.sharedNetworkMgr();
+		RMIServerNetworkMgr netmgr = RMIServerNetworkMgr.sharedNetworkMgr();
 		
 		while (true) {
 			Socket client = netmgr.waitForClient();

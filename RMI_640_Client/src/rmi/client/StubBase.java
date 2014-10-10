@@ -1,10 +1,12 @@
 /**
  * 
  */
-package rmi;
+package rmi.client;
 
+import rmi.RMIException;
+import rmi.RMIMessage;
+import rmi.RMIObjectReference;
 import rmi.RMIMessage.RMIMsgType;
-import network.NetworkMgr;
 
 /**
  * @author PY
@@ -17,7 +19,7 @@ public class StubBase {
 		RMIMessage outMsg = new RMIMessage();
 		outMsg._type = RMIMsgType.CALL;
 		outMsg._content = content;
-		RMIMessage inMsg = NetworkMgr.sendAndReceive(_ror._svrIP, _ror._svrPort, outMsg);
+		RMIMessage inMsg = RMIClientNetworkMgr.sendAndReceive(_ror._svrIP, _ror._svrPort, outMsg);
 		if (inMsg == null) {
 			throw new RMIException("Invalid return value");
 		}

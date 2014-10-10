@@ -8,11 +8,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 
-import network.NetworkMgr;
 import rmi.RMIMessage;
 import rmi.RMIMessage.RMIMsgType;
+import rmi.server.RMIServerNetworkMgr;
+import rmi.server.RMIServerRegistry;
+import rmi.server.RMIService;
+import rmi.server.ServerConst;
 import rmi.RMIObjectReference;
-import rmi.RMIService;
 
 /**
  * @author PY
@@ -21,12 +23,12 @@ import rmi.RMIService;
 public class RMISvrHandler extends Thread {
 	
 	Socket _socket;
-	NetworkMgr _netmgr;
+	RMIServerNetworkMgr _netmgr;
 	RMIServerRegistry _registry;
 	
 	RMISvrHandler(Socket socket) {
 		_socket = socket;
-		_netmgr = NetworkMgr.sharedNetworkMgr();
+		_netmgr = RMIServerNetworkMgr.sharedNetworkMgr();
 		_registry = RMIServerRegistry.sharedRegistry();
 	}
 
@@ -51,7 +53,7 @@ public class RMISvrHandler extends Thread {
 				
 				RMIObjectReference ror = new RMIObjectReference();
 				ror._objName = name;
-				ror._svrIP = NetworkMgr.getLocalIP();
+				ror._svrIP = RMIServerNetworkMgr.getLocalIP();
 				ror._svrPort = ServerConst.ListenPort;
 				
 				RMIMessage ret = new RMIMessage();
