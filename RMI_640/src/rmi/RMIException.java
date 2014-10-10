@@ -4,7 +4,12 @@
 package rmi;
 
 /**
- * @author PY
+ * RMIException
+ * 
+ * The exception type only thrown in remote invocation.
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailiangc)
  *
  */
 public class RMIException extends Exception {

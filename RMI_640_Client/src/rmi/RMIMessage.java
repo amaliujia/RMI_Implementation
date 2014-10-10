@@ -7,13 +7,23 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * type				
- * @author PY
- *
+ * RMIMessage
+ * 
+ * A structure for communicating between server and client. Two fields indicate 
+ * the message type(_type) and message body(_content). Every network message must use this structure.
+ * 
+ * Message types and description: 
+ * 		type			content								description
+ * 		LOOKUP			a string of the object name			client->server, to get a ROR for a name
+ * 		LOOKUP_RESPOND	RMIObjectReference or null			server->client, respond to LOOKUP
+ * 		CALL			{ROR, method name, args...}			client->server, invoke a remote method of a ROR
+ * 		CALL_RESPOND	Object or RMIObjectReference		server->client, return value or 
+ * 															RMIObjectReference(if return value is subclass of RMIService)
+ * 		EXCEPTION		RMIException						server->client, used when exception thrown
+ * 				
+ * @author Yang Pan (yangpan)
+ * @author KaiLiang Chen (kailiangc)
  */
-
-
-
 public class RMIMessage implements Serializable {
 
 	private static final long serialVersionUID = 8896593163858381713L;
@@ -30,13 +40,10 @@ public class RMIMessage implements Serializable {
 	public RMIMsgType _type;
 	public Object _content;
 	
-	/* For Call, content structure: [0] ROR, [1] funName, [2...] args */
-//	public String getObjectName() {
-//		if (_type != RMIMsgType.CALL) {
-//			return null;
-//		}
-//		return (String)(((Object[])_content)[0]);
-//	}
+	/*  ======== interfaces used when _type is CALL ========
+	 *  content is of type Object[] with the structure
+	 *  {ROR, method name, args...}	
+	 */
 	public RMIObjectReference getROR() {
 		if (_type != RMIMsgType.CALL) {
 			return null;
@@ -55,7 +62,6 @@ public class RMIMessage implements Serializable {
 		}
 		Object[] args = Arrays.copyOfRange((Object[])_content, 2, ((Object[])_content).length);
 		
-//		Object[] args = (Object[])(((Object[])_content)[2]);
 		Object[] originArgs = new Object[args.length];
 		
 		for (int i=0; i<args.length; ++i) {
@@ -63,6 +69,63 @@ public class RMIMessage implements Serializable {
 		}
 		return originArgs;
 	}
+	
+	/*
+	 * In the network communication, all primitive types will cast to wrapper class.
+	 * But if the argument type in the prototype of a method is primitive, you have to
+	 * cast the wrapper class to primitive type so as to find the method with reflection. 
+	 */
+	public Class<?>[] getArgType() {
+		if (_type != RMIMsgType.CALL) {
+			return null;
+		}
+		Object[] nobj = Arrays.copyOfRange((Object[])_content, 2, ((Object[])_content).length);
+		Class<?>[] types = new Class<?>[nobj.length];
+		for (int i=0; i<nobj.length; ++i) {
+			if (nobj[i].getClass() == Boolean[].class) {
+				types[i] = boolean[].class;
+			} else if (nobj[i].getClass() == Character[].class) {
+				types[i] = char[].class;
+			} else if (nobj[i].getClass() == Byte[].class) {
+				types[i] = byte[].class;
+			} else if (nobj[i].getClass() == Short[].class) {
+				types[i] = short[].class;
+			} else if (nobj[i].getClass() == Integer[].class) {
+				types[i] = int[].class;
+			} else if (nobj[i].getClass() == Long[].class) {
+				types[i] = long[].class;
+			} else if (nobj[i].getClass() == Float[].class) {
+				types[i] = float[].class;
+			} else if (nobj[i].getClass() == Double[].class) {
+				types[i] = double[].class;
+			} else if (nobj[i].getClass() == Character.class) {
+				types[i] = char.class;
+			} else if (nobj[i].getClass() == Byte.class) {
+				types[i] = byte.class;
+			} else if (nobj[i].getClass() == Boolean.class) {
+				types[i] = boolean.class;
+			} else if (nobj[i].getClass() == Short.class) {
+				types[i] = short.class;
+			} else if (nobj[i].getClass() == Integer.class) {
+				types[i] = int.class;
+			} else if (nobj[i].getClass() == Long.class) {
+				types[i] = long.class;
+			} else if (nobj[i].getClass() == Float.class) {
+				types[i] = float.class;
+			} else if (nobj[i].getClass() == Double.class) {
+				types[i] = double.class;
+			} else {
+				types[i] = nobj[i].getClass();
+			}
+		}
+		return types;
+	}
+	/* ======== CALL interfaces end ======== */
+	
+	
+	/*
+	 * internal method to cast from wrapper class to primitive
+	 */
 	Object toOriginalArg(Object obj) {
 		if (obj.getClass() == Integer[].class) {
 			Integer[] nobj = (Integer[])obj;
@@ -122,49 +185,5 @@ public class RMIMessage implements Serializable {
 		} 
 		return obj;
 	}
-	public Class<?>[] getArgType() {
-		if (_type != RMIMsgType.CALL) {
-			return null;
-		}
-		Object[] nobj = Arrays.copyOfRange((Object[])_content, 2, ((Object[])_content).length);
-		Class<?>[] types = new Class<?>[nobj.length];
-		for (int i=0; i<nobj.length; ++i) {
-			if (nobj[i].getClass() == Boolean[].class) {
-				types[i] = boolean[].class;
-			} else if (nobj[i].getClass() == Character[].class) {
-				types[i] = char[].class;
-			} else if (nobj[i].getClass() == Byte[].class) {
-				types[i] = byte[].class;
-			} else if (nobj[i].getClass() == Short[].class) {
-				types[i] = short[].class;
-			} else if (nobj[i].getClass() == Integer[].class) {
-				types[i] = int[].class;
-			} else if (nobj[i].getClass() == Long[].class) {
-				types[i] = long[].class;
-			} else if (nobj[i].getClass() == Float[].class) {
-				types[i] = float[].class;
-			} else if (nobj[i].getClass() == Double[].class) {
-				types[i] = double[].class;
-			} else if (nobj[i].getClass() == Character.class) {
-				types[i] = char.class;
-			} else if (nobj[i].getClass() == Byte.class) {
-				types[i] = byte.class;
-			} else if (nobj[i].getClass() == Boolean.class) {
-				types[i] = boolean.class;
-			} else if (nobj[i].getClass() == Short.class) {
-				types[i] = short.class;
-			} else if (nobj[i].getClass() == Integer.class) {
-				types[i] = int.class;
-			} else if (nobj[i].getClass() == Long.class) {
-				types[i] = long.class;
-			} else if (nobj[i].getClass() == Float.class) {
-				types[i] = float.class;
-			} else if (nobj[i].getClass() == Double.class) {
-				types[i] = double.class;
-			} else {
-				types[i] = nobj[i].getClass();
-			}
-		}
-		return types;
-	}
+	
 }

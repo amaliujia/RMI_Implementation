@@ -11,10 +11,19 @@ import java.net.Socket;
 import rmi.RMIMessage;
 
 /**
- * @author PY
+ * RMIClientNetworkMgr
+ * 
+ * The network manager for a client. It only contains one static method to send and receive
+ * message. It's enough in the RMI network communication.
+ *  
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailiangc)
  *
  */
 public class RMIClientNetworkMgr extends Object {
+	/*
+	 * Send a message to server and wait for the response.
+	 */
 	public static RMIMessage sendAndReceive(String ipAddr, int port, RMIMessage msg) {
 		RMIMessage rmiMsg = null;
 		try {

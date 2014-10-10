@@ -11,13 +11,20 @@ import rmi.server.RMIServerRegistry;
 import services.Hello;
 
 /**
- * @author PY
+ * RMIServer
+ * 
+ * The main entrance of the server program. 
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailiangc)
  *
  */
 public class RMIServer {
 	
 	/**
-	 * @param args
+	 * Everything in a server starts from here.
+	 * 
+	 * @param args No use.
 	 */
 	public static void main(String[] args) {
 		
@@ -33,7 +40,6 @@ public class RMIServer {
 		
 		while (true) {
 			Socket client = netmgr.waitForClient();
-			System.out.println("client connected!");
 			new RMISvrHandler(client).start();
 		}
 	}

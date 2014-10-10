@@ -4,7 +4,12 @@
 package rmi.client;
 
 /**
- * @author PY
+ * ClientConst
+ * 
+ * Some constants used in client. 
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailiangc)
  *
  */
 public class ClientConst {

@@ -18,15 +18,24 @@ import rmi.RMIObjectReference;
 import rmi.RMIMessage.RMIMsgType;
 
 /**
+ * RMIServerNetworkMgr
+ * 
+ * A network manager in server side. It is singleton and can be instantiated and got by 
+ * invoking `sharedNetworkMgr()`. 
+ *  
  * @author PY
  *
  */
 public class RMIServerNetworkMgr {
 	ServerSocket _svrSocket;
 	
+	/* singleton */
 	static RMIServerNetworkMgr _sharedNetworkMgr = null;
 	
-	RMIServerNetworkMgr(int port) {
+	/* 
+	 * Set private to avoid being instantiated by mistake.
+	 */
+	private RMIServerNetworkMgr(int port) {
 		try {
 			_svrSocket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -36,21 +45,53 @@ public class RMIServerNetworkMgr {
 		}
 	}
 	
+	/*
+	 * Singleton method
+	 */
+	public static RMIServerNetworkMgr sharedNetworkMgr() {
+		if (_sharedNetworkMgr == null) {
+			_sharedNetworkMgr = new RMIServerNetworkMgr(ServerConst.ListenPort);
+		}
+		return _sharedNetworkMgr;
+	}
+	
+	/* 
+	 * Get the IP address of this machine to fill in the ROR
+	 */
+	public static String getLocalIP() {
+		try {
+			return InetAddress.getLocalHost().getHostAddress();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		return null;
+	}
+	
+	/*
+	 * Wait to receive a message from a client. After receiving one, handle it with 
+	 * different response.
+	 * 
+	 * Return true if the connection is good. 
+	 * Return false otherwise. 
+	 * 
+	 */
 	public boolean msgReceiveAndHandler(Socket _socket) {
 		RMIMessage msg = null;
 		try {
 			msg = receiveMsg(_socket);
 		} catch (ClassNotFoundException | IOException e1) {
-			System.out.println("Client exit!");
+			/* the connection to this client is broken, close this socket */
 			try {
 				close(_socket);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return false;
 		}
+		
 		if (msg._type == RMIMsgType.LOOKUP) {
+			/* lookup request from client */
 			String name = (String)msg._content;
 			RMIService obj = RMIServerRegistry.sharedRegistry().getObj(name);
 			
@@ -58,8 +99,10 @@ public class RMIServerNetworkMgr {
 			ret._type = RMIMsgType.LOOKUP_RESPOND;
 			
 			if (obj == null) {
+				/* content is null if the corresponding service is not established I*/
 				ret._content = null;
 			} else {
+				/* set content to be the RMIObjectReference */
 				RMIObjectReference ror = new RMIObjectReference();
 				ror._objName = name;
 				ror._remoteID = obj._rorID;
@@ -79,8 +122,6 @@ public class RMIServerNetworkMgr {
 			sendMsg(_socket, ret);
 		}
 		else if (msg._type == RMIMsgType.CALL) {
-			// ROR, funName, arg
-			
 			/* get the object by ror, if the ror is got from lookup, search in _registeredServices,
 			 * or got from method invoke, search in _referencedServices (reference by value).
 			 */
@@ -100,6 +141,8 @@ public class RMIServerNetworkMgr {
 				
 				try {
 					Method m = obj.getClass().getMethod(funName, argType);
+					
+					/* invoke the method and get the return value */
 					Object retVal = m.invoke(obj, arg);
 					
 					if (retVal instanceof RMIService) {
@@ -139,52 +182,23 @@ public class RMIServerNetworkMgr {
 		return true;
 	}
 	
-//	public static RMIMessage sendAndReceive(String ipAddr, int port, RMIMessage msg) {
-//		RMIMessage rmiMsg = null;
-//		try {
-//			Socket socket = new Socket(ipAddr, port);
-//			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-//			out.writeObject(msg);
-//			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-//			Object inMsg = in.readObject();
-//			if (inMsg instanceof RMIMessage) {
-//				rmiMsg = (RMIMessage) inMsg;
-//			}
-//			
-//		} catch (IOException | ClassNotFoundException e) {
-//			e.printStackTrace();
-//		}
-//		return rmiMsg;
-//	}
 	
-	public static String getLocalIP() {
-		try {
-			return InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
-		return null;
-	}
-	
-	public static RMIServerNetworkMgr sharedNetworkMgr() {
-		if (_sharedNetworkMgr == null) {
-			_sharedNetworkMgr = new RMIServerNetworkMgr(ServerConst.ListenPort);
-		}
-		return _sharedNetworkMgr;
-	}
-	
+	/*
+	 * You should have a loop to call this method to receive incoming clients.
+	 */
 	public Socket waitForClient() {
 		try {
 			Socket socket = _svrSocket.accept();
 			return socket;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
+	/*
+	 * Receive a message from client socket. Return null if the incoming message is not RMIMessage.
+	 */
 	public RMIMessage receiveMsg(Socket socket) throws IOException, ClassNotFoundException {
 		ObjectInputStream inStream;
 		Object inObj;
@@ -199,6 +213,9 @@ public class RMIServerNetworkMgr {
 		return null;
 	}
 	
+	/*
+	 * Send msg to the client socket.
+	 */
 	public void sendMsg(Socket socket, Object msg) {
 		if (!(msg instanceof RMIMessage)) {
 			return;
@@ -209,11 +226,13 @@ public class RMIServerNetworkMgr {
 			out = new ObjectOutputStream(socket.getOutputStream());
 			out.writeObject(msg);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
+	/*
+	 * Close the socket.
+	 */
 	public void close (Socket socket) throws IOException {
 		socket.close();
 	}

@@ -6,7 +6,13 @@ package rmi.server;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @author PY
+ * RMIService
+ * 
+ * The base class of all classes that can be remotely invoked. If you want to add a new
+ * service, your service class should inherit this base class.
+ *  
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailiangc)
  *
  */
 public abstract class RMIService {
