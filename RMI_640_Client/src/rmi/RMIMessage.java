@@ -30,11 +30,18 @@ public class RMIMessage implements Serializable {
 	public RMIMsgType _type;
 	public Object _content;
 	
-	public String getObjectName() {
+	/* For Call, content structure: [0] ROR, [1] funName, [2...] args */
+//	public String getObjectName() {
+//		if (_type != RMIMsgType.CALL) {
+//			return null;
+//		}
+//		return (String)(((Object[])_content)[0]);
+//	}
+	public RMIObjectReference getROR() {
 		if (_type != RMIMsgType.CALL) {
 			return null;
 		}
-		return (String)(((Object[])_content)[0]);
+		return (RMIObjectReference)(((Object[])_content)[0]);
 	}
 	public String getMethodName() {
 		if (_type != RMIMsgType.CALL) {
@@ -47,6 +54,8 @@ public class RMIMessage implements Serializable {
 			return null;
 		}
 		Object[] args = Arrays.copyOfRange((Object[])_content, 2, ((Object[])_content).length);
+		
+//		Object[] args = (Object[])(((Object[])_content)[2]);
 		Object[] originArgs = new Object[args.length];
 		
 		for (int i=0; i<args.length; ++i) {
