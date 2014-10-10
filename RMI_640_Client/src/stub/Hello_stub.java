@@ -14,20 +14,21 @@ import rmi.client.StubBase;
 public class Hello_stub extends StubBase {
 	
 	public String haha(String a) throws RMIException {
-		Object[] content = {"Hello", "haha", a};
-		RMIMessage inMsg = invokeRemote(content);
-		if (!(inMsg._content instanceof String)) {
-			throw new RMIException("Invalid return value type!");
+		Object[] content = {_ror, "haha", a};
+		Object retVal = invokeRemote(content, true);
+		
+		if (!(retVal instanceof String)) {
+			throw new RMIException("Invalid return value type! String expected, but " + retVal.getClass().getName() + " received.");
 		}
-		return (String)inMsg._content;
+		return (String)retVal;
 	}
 	
 	public int test(String a, String b, int c, double[] d) throws RMIException {
-		Object[] content = {"Hello", "test", a, b, c, d};
-		RMIMessage inMsg = invokeRemote(content);
-		if (!(inMsg._content instanceof Integer)) {
-			throw new RMIException("Invalid return value type!");
+		Object[] content = {_ror, "test", a, b, c, d};
+		Object retVal = invokeRemote(content, true);
+		if (!(retVal instanceof Integer)) {
+			throw new RMIException("Invalid return value type! int expected, but" + retVal.getClass().getName() + " received.");
 		}
-		return ((Integer)inMsg._content).intValue();
+		return ((Integer)retVal).intValue();
 	}
 }

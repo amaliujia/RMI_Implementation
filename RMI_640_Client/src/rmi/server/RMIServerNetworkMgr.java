@@ -52,15 +52,22 @@ public class RMIServerNetworkMgr {
 		}
 		if (msg._type == RMIMsgType.LOOKUP) {
 			String name = (String)msg._content;
-			
-			RMIObjectReference ror = new RMIObjectReference();
-			ror._objName = name;
-			ror._svrIP = RMIServerNetworkMgr.getLocalIP();
-			ror._svrPort = ServerConst.ListenPort;
+			RMIService obj = RMIServerRegistry.sharedRegistry().getObj(name);
 			
 			RMIMessage ret = new RMIMessage();
 			ret._type = RMIMsgType.LOOKUP_RESPOND;
-			ret._content = ror;
+			
+			if (obj == null) {
+				ret._content = null;
+			} else {
+				RMIObjectReference ror = new RMIObjectReference();
+				ror._objName = name;
+				ror._remoteID = obj._rorID;
+				ror._svrIP = RMIServerNetworkMgr.getLocalIP();
+				ror._svrPort = ServerConst.ListenPort;
+				
+				ret._content = ror;
+			}
 			sendMsg(_socket, ret);
 		}
 		else if (msg._type == RMIMsgType.LIST) {
@@ -72,34 +79,62 @@ public class RMIServerNetworkMgr {
 			sendMsg(_socket, ret);
 		}
 		else if (msg._type == RMIMsgType.CALL) {
-			// objName, funName, arg
-			String objName = msg.getObjectName();
-			String funName = msg.getMethodName();
+			// ROR, funName, arg
 			
-			Object[] arg = msg.getArguments();
-			Class<?>[] argType = msg.getArgType();
-			RMIService obj = RMIServerRegistry.sharedRegistry().getObj(objName);
+			/* get the object by ror, if the ror is got from lookup, search in _registeredServices,
+			 * or got from method invoke, search in _referencedServices (reference by value).
+			 */
+			RMIService obj = RMIServerRegistry.sharedRegistry().getObjByROR(msg.getROR());
 			
-			try {
-				Method m = obj.getClass().getMethod(funName, argType);
-				Object retVal = m.invoke(obj, arg);
+			RMIMessage retMsg = new RMIMessage();
+			retMsg._type = RMIMsgType.CALL_RESPOND;
+			
+			if (obj == null) {
+				retMsg._content = null;
+				sendMsg(_socket, retMsg);
+			} else {
+				String funName = msg.getMethodName();
 				
-				RMIMessage ret = new RMIMessage();
-				ret._type = RMIMsgType.CALL_RESPOND;
-				ret._content = retVal;
-				sendMsg(_socket, ret);
+				Object[] arg = msg.getArguments();
+				Class<?>[] argType = msg.getArgType();
 				
-			} catch (NoSuchMethodException e) {
-				System.out.println("No such method " + funName + ": ");
-				for (Class<?> type: argType) {
-					System.out.print(type.getName() + " ");
+				try {
+					Method m = obj.getClass().getMethod(funName, argType);
+					Object retVal = m.invoke(obj, arg);
+					
+					if (retVal instanceof RMIService) {
+						/* if return value is subclass of RMIService, return ROR */
+						RMIServerRegistry.sharedRegistry().addReferencedService((RMIService) retVal);
+						RMIObjectReference ror = new RMIObjectReference();
+						ror._objName = retVal.getClass().getName();
+						ror._remoteID = ((RMIService) retVal)._rorID;
+						ror._svrIP = RMIServerNetworkMgr.getLocalIP();
+						ror._svrPort = ServerConst.ListenPort;
+						retMsg._content = ror;
+					} else {
+						retMsg._content = retVal;
+					}
+					sendMsg(_socket, retMsg);
+					
+				} catch (NoSuchMethodException e) {
+					System.out.println("No such method " + funName + ": ");
+					for (Class<?> type: argType) {
+						System.out.print(type.getName() + " ");
+					}
+					RMIMessage retMsgEx = new RMIMessage();
+					retMsgEx._type = RMIMsgType.EXCEPTION;
+					retMsgEx._content = e;
+					sendMsg(_socket, retMsgEx);
+				} catch (SecurityException | IllegalAccessException | IllegalArgumentException
+						| InvocationTargetException e) {
+					RMIMessage retMsgEx = new RMIMessage();
+					retMsgEx._type = RMIMsgType.EXCEPTION;
+					retMsgEx._content = e;
+					sendMsg(_socket, retMsgEx);
+					e.printStackTrace();
 				}
-				RMIMessage ret = new RMIMessage();
-				ret._type = RMIMsgType.EXCEPTION;
-			} catch (SecurityException | IllegalAccessException | IllegalArgumentException
-					| InvocationTargetException e) {
-				e.printStackTrace();
 			}
+			
 		}
 		return true;
 	}

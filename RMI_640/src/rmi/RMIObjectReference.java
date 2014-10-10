@@ -18,7 +18,7 @@ public class RMIObjectReference implements Serializable {
 	public String _svrIP;
 	public int _svrPort;
 	public String _objName;
-	int _remoteID;
+	public int _remoteID;
 	
 	public RMIObjectReference() {
 		this._svrIP = "";

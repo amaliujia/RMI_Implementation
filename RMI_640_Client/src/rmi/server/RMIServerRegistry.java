@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import rmi.RMIException;
+import rmi.RMIObjectReference;
 
 /**
  * @author PY
@@ -16,6 +17,7 @@ import rmi.RMIException;
 public class RMIServerRegistry {
 	static RMIServerRegistry _sharedRegistry = null;
 	HashMap <String, RMIService> _registeredServices = null;
+	HashMap <Integer, RMIService> _referencedServices = null;
 	
 	public static RMIServerRegistry sharedRegistry() {
 		if (_sharedRegistry == null) {
@@ -26,6 +28,7 @@ public class RMIServerRegistry {
 	
 	RMIServerRegistry() {
 		_registeredServices = new HashMap<String, RMIService>();
+		_referencedServices = new HashMap<Integer, RMIService>();
 	}
 	
 	public void bind(String name, RMIService obj) throws RMIException {
@@ -47,4 +50,19 @@ public class RMIServerRegistry {
 		return (String[]) names.toArray();
 	}
 	
+	public void addReferencedService(RMIService refSvc) {
+		_referencedServices.put(Integer.valueOf(refSvc._rorID), refSvc);
+	}
+	
+	public RMIService getReferencedService(int rorID) {
+		return _referencedServices.get(Integer.valueOf(rorID));
+	}
+	
+	public RMIService getObjByROR(RMIObjectReference ror) {
+		RMIService ret = null;
+		if ((ret = _referencedServices.get(ror._remoteID)) == null) {
+			ret = _registeredServices.get(ror._objName);
+		}
+		return ret;
+	}
 }
