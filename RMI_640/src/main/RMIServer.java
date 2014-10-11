@@ -8,7 +8,6 @@ import java.net.Socket;
 import rmi.RMIException;
 import rmi.server.RMIServerNetworkMgr;
 import rmi.server.RMIServerRegistry;
-import services.Hello;
 import services.StudentList;
 
 /**
@@ -17,7 +16,7 @@ import services.StudentList;
  * The main entrance of the server program. 
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIServer {
@@ -28,11 +27,8 @@ public class RMIServer {
 	 * @param args No use.
 	 */
 	public static void main(String[] args) {
-		
-		Hello hello = new Hello();
 		StudentList studentList = new StudentList();
 		try {
-			RMIServerRegistry.sharedRegistry().bind("Hello", hello);
 			RMIServerRegistry.sharedRegistry().bind("StudentList", studentList);
 		} catch (RMIException e) {
 			e.printStackTrace();

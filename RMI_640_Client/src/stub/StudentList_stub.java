@@ -9,7 +9,12 @@ import rmi.client.StubBase;
 import stub.Student_stub;
 
 /**
- * @author PY
+ * StudentList_stub
+ * 
+ * a service stub class provides register student's name and score and get first student's info
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class StudentList_stub extends StubBase {

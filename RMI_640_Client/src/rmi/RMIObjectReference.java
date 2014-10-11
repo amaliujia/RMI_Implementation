@@ -17,7 +17,7 @@ import rmi.client.StubBase;
  * with the return value of RMIService type.
  *  
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIObjectReference implements Serializable {

@@ -9,10 +9,10 @@ package rmi.client;
  * Some constants used in client. 
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class ClientConst {
 	public static final String SvrIP = "127.0.0.1";
-	public static final int SvrPort = 6777;
+	public static final int SvrPort = 1099;
 }

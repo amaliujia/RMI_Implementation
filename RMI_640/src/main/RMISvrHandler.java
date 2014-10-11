@@ -15,14 +15,14 @@ import rmi.server.RMIServerNetworkMgr;
  * You should implement your own handler if you use our RMI package. 
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMISvrHandler extends Thread {
 	
-	Socket _socket;
+	private Socket _socket;
 	
-	RMISvrHandler(Socket socket) {
+	public RMISvrHandler(Socket socket) {
 		_socket = socket;
 	}
 

@@ -8,7 +8,12 @@ import java.util.ArrayList;
 import rmi.server.RMIService;
 
 /**
- * @author PY
+ * Student
+ * 
+ * a concrete service class provides register student's name and score and get first student's info
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class StudentList extends RMIService {

@@ -6,9 +6,9 @@ package rmi.server;
  * Some constants used in server.
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class ServerConst {
-	public static final int ListenPort = 6777;
+	public static final int ListenPort = 1099;
 }

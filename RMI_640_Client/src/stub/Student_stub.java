@@ -7,7 +7,12 @@ import rmi.RMIException;
 import rmi.client.StubBase;
 
 /**
- * @author PY
+ * Student_stub
+ * 
+ * a service stub class provides set/get student's name and score 
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class Student_stub extends StubBase {

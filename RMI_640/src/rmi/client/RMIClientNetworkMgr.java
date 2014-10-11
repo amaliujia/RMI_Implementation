@@ -17,7 +17,7 @@ import rmi.RMIMessage;
  * message. It's enough in the RMI network communication.
  *  
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIClientNetworkMgr extends Object {

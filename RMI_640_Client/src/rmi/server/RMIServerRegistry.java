@@ -17,18 +17,18 @@ import rmi.RMIObjectReference;
  * It is singleton and can be instantiated and got by invoking `sharedRegistry`.
  *  
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIServerRegistry {
 	/* singleton */
-	static RMIServerRegistry _sharedRegistry = null;
+	private static RMIServerRegistry _sharedRegistry = null;
 	
 	/* hash map storing the registered services */
-	HashMap <String, RMIService> _registeredServices = null;
+	private HashMap <String, RMIService> _registeredServices = null;
 	
 	/* hash map storing the services generated in remote invocation */
-	HashMap <Integer, RMIService> _referencedServices = null;
+	private HashMap <Integer, RMIService> _referencedServices = null;
 	
 	public static RMIServerRegistry sharedRegistry() {
 		if (_sharedRegistry == null) {

@@ -23,14 +23,15 @@ import rmi.RMIMessage.RMIMsgType;
  * A network manager in server side. It is singleton and can be instantiated and got by 
  * invoking `sharedNetworkMgr()`. 
  *  
- * @author PY
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIServerNetworkMgr {
-	ServerSocket _svrSocket;
+	private ServerSocket _svrSocket;
 	
 	/* singleton */
-	static RMIServerNetworkMgr _sharedNetworkMgr = null;
+	private static RMIServerNetworkMgr _sharedNetworkMgr = null;
 	
 	/* 
 	 * Set private to avoid being instantiated by mistake.

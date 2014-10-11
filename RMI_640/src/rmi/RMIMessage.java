@@ -22,7 +22,7 @@ import java.util.Arrays;
  * 		EXCEPTION		RMIException						server->client, used when exception thrown
  * 				
  * @author Yang Pan (yangpan)
- * @author KaiLiang Chen (kailiangc)
+ * @author KaiLiang Chen (kailianc)
  */
 public class RMIMessage implements Serializable {
 

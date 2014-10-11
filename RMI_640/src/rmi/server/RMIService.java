@@ -12,11 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * service, your service class should inherit this base class.
  *  
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public abstract class RMIService {
-	static volatile AtomicInteger RORID = new AtomicInteger(0);
+	private static volatile AtomicInteger RORID = new AtomicInteger(0);
 	public int _rorID;
 	
 	public RMIService() {

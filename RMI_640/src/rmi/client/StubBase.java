@@ -15,7 +15,7 @@ import rmi.RMIMessage.RMIMsgType;
  * Examples are in stub package.
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class StubBase {

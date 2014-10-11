@@ -12,7 +12,9 @@ import rmi.RMIMessage.RMIMsgType;
  * RMIClientRegistry
  * 
  * Registry class in client. Wraps the lookup method in client.
- * @author PY
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIClientRegistry {

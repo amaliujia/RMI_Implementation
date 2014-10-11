@@ -6,7 +6,12 @@ package services;
 import rmi.server.RMIService;
 
 /**
- * @author PY
+ * Student
+ * 
+ * a concrete service class provides set/get student's name and score 
+ * 
+ * @author Yang Pan (yangpan)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class Student extends RMIService {

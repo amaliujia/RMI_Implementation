@@ -9,7 +9,7 @@ package rmi;
  * The exception type only thrown in remote invocation.
  * 
  * @author Yang Pan (yangpan)
- * @author Kailiang Chen (kailiangc)
+ * @author Kailiang Chen (kailianc)
  *
  */
 public class RMIException extends Exception {
