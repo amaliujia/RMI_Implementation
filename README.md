@@ -5,6 +5,8 @@ Second project of 15-640 Distributed Systems. Design and implement a RMI framewo
 
 We have developed a facility that can be exported to be a framework. Either you want to use it in server (callee) or client (caller), you can import the framework and write your own program in the style as RMI_640 (server). and RMI_640_Client (client). It's fairly easy.
 
+For more details, please refer to `Material/Report of RMI Facility.pdf`.
+
 
 ## Class explanation
 
